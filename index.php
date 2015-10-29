@@ -1,15 +1,17 @@
 <?php
 error_reporting(E_ALL);
 
-// because we use classes that are named 'Classname.class.php'
-spl_autoload_extensions('.class.php');
-spl_autoload_register();
+// register our autoloader for class file resolution
+require_once('Core/Autoloader.class.php');
+$autoloader = new \Core\Autoloader();
+
+// as early in the chain as possible, activate security functions and headers, before we process any user input
+$security = new \Core\Security();
 
 // register all of our routes
-$route = new \Config\Routing();
-
-// instantiate a front controller
-$controller = new \Core\Controller();
-
-
-
+try {
+    $router = new \Config\Routing();
+} catch (\Exception $ex) {
+    // if an exception occurs, show the message and kill the request
+    die($ex->getMessage());
+}
