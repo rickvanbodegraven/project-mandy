@@ -8,10 +8,16 @@ $autoloader = new \Core\Autoloader();
 // as early in the chain as possible, activate security functions and headers, before we process any user input
 $security = new \Core\Security();
 
-// register all of our routes
+// start up session handling
+$session = new \Core\Session();
+
+// register all known routes
+$router = new \Core\Routing();
+
 try {
-    $router = new \Config\Routing();
+    $output = $router->handleRequest();
 } catch (\Exception $ex) {
-    // if an exception occurs, show the message and kill the request
     die($ex->getMessage());
 }
+
+echo $output;

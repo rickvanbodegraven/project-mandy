@@ -16,7 +16,7 @@ class Autoloader
      */
     public function __construct()
     {
-        $this->locations = ['Config', 'Controllers', 'Core', 'Models', 'Views'];
+        $this->locations = [ 'Controllers', 'Core', 'Models', 'Views' ];
 
         // use the current working directory, appended with a trailing slash
         $this->rootDirectory = getcwd() . DIRECTORY_SEPARATOR;

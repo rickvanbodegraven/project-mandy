@@ -9,8 +9,17 @@ namespace Core;
  */
 class Security
 {
+    private $requestIsEncrypted = false;
+    private $domain = "";
+
     public function __construct()
     {
+        if (isset($_SERVER['HTTPS']) === true) {
+            $this->requestIsEncrypted = true;
+        }
+
+        $this->domain = $_SERVER['SERVER_NAME'];
+
         $this->setHeaders();
         $this->configureSettings();
     }
@@ -33,8 +42,17 @@ class Security
         header("Content-Security-Policy: default-src 'self'");
     }
 
+    /**
+     *
+     */
     private function configureSettings()
     {
-        // TODO --- implement secure/httponly cookies etc
+        session_set_cookie_params(0, "/", $this->domain, false, true);
+
+        if ($this->requestIsEncrypted === true) {
+            session_set_cookie_params(0, "/", $this->domain, true, true);
+        }
+
+        // TODO perhaps set some more sec. settings?
     }
 }
