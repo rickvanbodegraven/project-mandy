@@ -11,6 +11,9 @@ class Session
 {
     private $session;
 
+    /**
+     *
+     */
     public function __construct()
     {
         $this->initialize();
@@ -18,21 +21,35 @@ class Session
         $this->session =& $_SESSION;
     }
 
+    /**
+     *
+     */
     private function initialize()
     {
+        // set the name for the session cookie. MAKE SURE IT CONTAINS AT LEAST ONE LETTER.
+        session_name(md5('PROJECTMANDYSESSIONKEY') . "COOKIE");
         session_start();
     }
 
+    /**
+     * @param mixed $key
+     * @param mixed $data
+     * @throws \Exception
+     */
     public function set($key, $data)
     {
+        if (is_string($key) !== true) {
+            throw new \Exception("Session data can only be set in a string-based key");
+        }
 
+        $this->session[$key] = $data;
     }
 
     public function destroy($regenerate = true)
     {
         session_destroy();
 
-        if ($regenerate) {
+        if ($regenerate === true) {
             session_regenerate_id(true);
         }
     }
@@ -43,8 +60,9 @@ class Session
      */
     public function get($key)
     {
-        if (isset($this->session[$key]) === false)
+        if (isset($this->session[$key]) === false) {
             return false;
+        }
 
         return $this->session[$key];
     }

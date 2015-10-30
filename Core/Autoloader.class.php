@@ -19,7 +19,7 @@ class Autoloader
         $this->locations = [ 'Controllers', 'Core', 'Models', 'Views' ];
 
         // use the current working directory, appended with a trailing slash
-        $this->rootDirectory = getcwd() . DIRECTORY_SEPARATOR;
+        $this->rootDirectory = __DIR__ . '/../';
 
         // register our own implementation of the autoloader
         $this->register();
