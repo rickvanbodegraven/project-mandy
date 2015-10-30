@@ -9,6 +9,9 @@
 .idea/
 # if you remove the above rule, at least ignore the following:
 
+# ignore the composer directory, running composer after installing should fix that
+vendor/
+
 # User-specific stuff:
 # .idea/workspace.xml
 # .idea/tasks.xml

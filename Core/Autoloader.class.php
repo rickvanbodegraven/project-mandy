@@ -23,6 +23,9 @@ class Autoloader
 
         // register our own implementation of the autoloader
         $this->register();
+
+        // and now also register the Composer autoloader
+        require_once('../vendor/autoload.php');
     }
 
     /**

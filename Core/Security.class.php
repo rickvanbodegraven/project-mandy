@@ -40,6 +40,10 @@ class Security
 
         // the CSP-header in a very strict fashion
         header("Content-Security-Policy: default-src 'self'");
+
+        // remove the PHP version header too
+        header_remove('x-powered-by');
+
     }
 
     /**
