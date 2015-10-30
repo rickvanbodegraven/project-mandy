@@ -1,5 +1,6 @@
 <?php
 // bootstrap the application, load all of the modules and set up routing
+
 /** @var $application \Core\Application */
 $application = require_once('../bootstrap.php');
 
