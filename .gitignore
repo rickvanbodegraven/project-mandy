@@ -1,5 +1,13 @@
 # Created by https://www.gitignore.io/api/phpstorm
 
+### Project MANDY ###
+
+storage/*
+!storage/logs/.gitkeep
+!storage/cache/.gitkeep
+
+
+
 ### PhpStorm ###
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio
 
