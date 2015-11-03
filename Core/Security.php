@@ -43,7 +43,6 @@ class Security
 
         // remove the PHP version header too
         header_remove('x-powered-by');
-
     }
 
     /**

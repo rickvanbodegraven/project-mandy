@@ -39,7 +39,7 @@ class Autoloader
 
             $className = str_replace("\\", DIRECTORY_SEPARATOR, $className);
 
-            $file = $this->rootDirectory . $className . ".class.php";
+            $file = $this->rootDirectory . $className . ".php";
 
             if (file_exists($file) === true) {
                 require_once($file);
