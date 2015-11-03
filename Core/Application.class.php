@@ -13,6 +13,7 @@ class Application
 
     /**
      * @param $module
+     *
      * @throws \Exception
      * @return $this
      */
@@ -22,7 +23,7 @@ class Application
             throw new \Exception("Tried registering a module that is not an actual module");
         }
 
-        $this->modules[ get_class($module) ] = $module;
+        $this->modules[get_class($module)] = $module;
 
         return $this;
     }

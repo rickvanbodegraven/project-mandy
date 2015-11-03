@@ -1,5 +1,5 @@
 <?php
-require_once(__DIR__ . DIRECTORY_SEPARATOR .'Core/Autoloader.class.php');
+require_once(__DIR__ . DIRECTORY_SEPARATOR . 'Core/Autoloader.class.php');
 
 // register said autoloader
 $autoloader = new \Core\Autoloader();
@@ -8,8 +8,9 @@ $autoloader = new \Core\Autoloader();
 $application = new \Core\Application();
 
 // as early in the chain as possible, activate security functions and headers, before we process any user input
-$application->register(new \Core\Security())
-            ->register(new \Core\Session())  // start up session handling
-            ->register(new \Core\Routing()); // register router
+$application
+    ->register(new \Core\Security())
+    ->register(new \Core\Session())  // start up session handling
+    ->register(new \Core\Routing()); // register router
 
 return $application;

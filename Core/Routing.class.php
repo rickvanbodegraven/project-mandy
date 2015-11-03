@@ -8,9 +8,9 @@ namespace Core;
  */
 class Routing
 {
-    private $routes = [ 'GET' => [], 'POST' => [] ];
+    private $routes = ['GET' => [], 'POST' => []];
 
-    private $acceptedMethods = [ 'POST' => 0, 'GET' => 1 ];
+    private $acceptedMethods = ['POST' => 0, 'GET' => 1];
 
     /**
      * Constructor

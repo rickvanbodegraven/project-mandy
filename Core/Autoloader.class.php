@@ -16,7 +16,7 @@ class Autoloader
      */
     public function __construct()
     {
-        $this->locations = [ 'Controllers', 'Core', 'Models', 'Views' ];
+        $this->locations = ['Controllers', 'Core', 'Models', 'Views'];
 
         // use the current working directory, appended with a trailing slash
         $this->rootDirectory = __DIR__ . '/../';
@@ -35,7 +35,7 @@ class Autoloader
      */
     private function register()
     {
-        spl_autoload_register(function($className) {
+        spl_autoload_register(function ($className) {
 
             $className = str_replace("\\", DIRECTORY_SEPARATOR, $className);
 
