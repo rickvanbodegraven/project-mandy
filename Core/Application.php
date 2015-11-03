@@ -4,8 +4,8 @@ namespace Core;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-
-use \Core\Wrapper\Twig;
+use Core\Wrapper\Twig;
+use Core\Session as Session;
 
 class Application
 {
@@ -14,11 +14,19 @@ class Application
 
     public function __construct()
     {
-        // as early in the chain as possible, activate security functions and headers, before we process any user input
-        $this->register(new Security())
-             ->register(new Session()) // start up session handling
-             ->register(new Routing()) // register router
-             ->register(new Twig());
+        $this->registerModules([
+            new Security(),
+            new Session(),
+            new Routing(),
+            new Twig(),
+        ]);
+    }
+
+    public function registerModules(array $modules)
+    {
+        foreach ($modules as $module) {
+            $this->register($module);
+        }
     }
 
     /**

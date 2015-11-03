@@ -3,7 +3,14 @@
     "symfony/http-kernel": "^2.7",
     "symfony/routing": "^2.7",
     "doctrine/annotations": "^1.2",
-    "symfony/config": "^2.7",
     "twig/twig" : "~1.0"
+  },
+  "scripts" : {
+    "post-update-cmd" : [
+      "# Setting directory and file ownerships",
+      "sudo chown -R rick:www-data *",
+      "# Setting directory and file permissions",
+      "sudo chmod -R u=rwX,g=rwX,o= *"
+    ]
   }
 }
