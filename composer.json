@@ -10,7 +10,8 @@
       "# Setting directory and file ownerships",
       "sudo chown -R rick:www-data *",
       "# Setting directory and file permissions",
-      "sudo chmod -R u=rwX,g=rwX,o= *"
+      "sudo chmod -R u=rwX,g=rwX,o= *",
+      "# TODO: add permissions here for storage dir"
     ]
   }
 }

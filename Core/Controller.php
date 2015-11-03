@@ -2,15 +2,18 @@
 
 namespace Core;
 
-class Controller
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+
+abstract class Controller
 {
-    public function __construct()
-    {
+    private $request;
+    private $response;
 
+    public function __construct(Request $request, Response $response = null)
+    {
+        $this->request = $request;
     }
 
-    public function index()
-    {
-
-    }
+    public abstract function index();
 }

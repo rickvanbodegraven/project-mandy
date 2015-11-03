@@ -1,5 +1,6 @@
 <?php
-require_once(__DIR__ . DIRECTORY_SEPARATOR . 'Core/Autoloader.php');
+
+require_once(APPROOT . '/Core/Autoloader.php');
 
 // register said autoloader
 $autoloader = new \Core\Autoloader();

@@ -53,12 +53,10 @@ class Application
     {
         $this->request = Request::createFromGlobals();
 
-        $input = $this->request->get('name', 'Default');
+        // TODO use the Routing module to route the request to the correct controller
 
-        $response = new Response($input);
+        // TODO tell that controller to generate the output, then pass that through to the response
+//        $response = new Response($input);
 
-        // TODO, TBI
-        $response->send();
     }
-
 }
