@@ -1,10 +1,10 @@
 <?php
 
-namespace Core\Wrapper;
+namespace Core\Wrappers;
 
 /**
- * Wrapper for Twig. Handles configuration and such.
- * @package Core\Wrapper
+ * Wrappers for Twig. Handles configuration and such.
+ * @package Core\Wrappers
  */
 class Twig
 {

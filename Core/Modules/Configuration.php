@@ -1,8 +1,8 @@
 <?php
 
-namespace Core;
+namespace Core\Modules;
 
-class Configuration
+class Configuration extends Module
 {
     private $configPath = "";
     private $loadedConfigurations = [];

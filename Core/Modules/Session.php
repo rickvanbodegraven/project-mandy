@@ -1,34 +1,28 @@
 <?php
 
-namespace Core;
+namespace Core\Modules;
 
 /**
  * Session handling for the framework
  *
  * @package Core
  */
-class Session
+class Session extends Module
 {
     private $session;
 
-    /**
-     *
-     */
-    public function __construct()
-    {
-        $this->initialize();
-
-        $this->session =& $_SESSION;
-    }
+    // TODO perhaps implement a internal buffer session and flush that to $_SESSION on object destruction
 
     /**
-     *
+     * Is called by the base Module class directly after the constructor has been called
      */
-    private function initialize()
+    protected function postCreation()
     {
         // set the name for the session cookie. MAKE SURE IT CONTAINS AT LEAST ONE LETTER.
         session_name(md5('APPLICATIONSESSIONKEY') . "COOKIE");
         session_start();
+
+        $this->session =& $_SESSION;
     }
 
     /**

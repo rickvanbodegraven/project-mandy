@@ -2,48 +2,100 @@
 
 namespace Core;
 
+use Core\Modules\Module;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Core\Wrapper\Twig;
-use Core\Session as Session;
+use Core\Wrappers\Twig;
+use Core\Modules\Session as Session;
+use Core\Modules\Security as Security;
+use Core\Wrappers\Routing as Routing;
 
 class Application
 {
+    /**
+     * @var Modules\Module[]
+     */
     private $modules = [];
+
+    private $wrappers = [];
+
+    /**
+     * @var \Symfony\Component\HttpFoundation\Request
+     */
     private $request = null;
 
     public function __construct()
     {
+        // TODO move these hardcoded pieces to a config setting? or add additional modules/wrappers from a config?
+
         $this->registerModules([
             new Security(),
             new Session(),
+        ]);
+
+        $this->registerWrappers([
             new Routing(),
-            new Twig(),
+            new Twig()
         ]);
     }
 
-    public function registerModules(array $modules)
+    /**
+     * @param array $modules
+     *
+     * @throws \Exception
+     */
+    private function registerModules(array $modules)
     {
         foreach ($modules as $module) {
-            $this->register($module);
+            $this->registerModule($module);
         }
     }
 
     /**
-     * @param $module
+     * @param Modules\Module $module
      *
      * @throws \Exception
      * @return $this
      */
-    public function register($module)
+    private function registerModule($module)
     {
-        if (is_object($module) === false) {
+        if (is_object($module) === false || is_a($module, Modules\Module::class, true) === false) {
+            var_dump($module);
             throw new \Exception("Tried registering a module that is not an actual module");
         }
 
-        $this->modules[get_class($module)] = $module;
+        $module->setApplication($this);
+
+        $this->modules[get_class($module)] =& $module;
 
         return $this;
+    }
+
+    /**
+     * @param object[] $wrappers
+     *
+     * @throws \Exception
+     */
+    private function registerWrappers(array $wrappers)
+    {
+        // TODO
+        foreach ($wrappers as $wrapper) {
+            $this->registerWrapper($wrapper);
+        }
+    }
+
+    /**
+     * @param object $wrapper
+     *
+     * @throws \Exception
+     */
+    private function registerWrapper($wrapper)
+    {
+        if (is_object($wrapper) === false) {
+            throw new \Exception("Tried registering a wrapper that is no object");
+        }
+
+        $this->wrappers[get_class($wrapper)] =& $wrapper;
     }
 
     /**

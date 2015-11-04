@@ -1,6 +1,6 @@
 <?php
 
-namespace Core;
+namespace Core\Modules;
 
 /**
  * Class autoloader implementation
@@ -18,14 +18,14 @@ class Autoloader
     {
         $this->locations = ['Controllers', 'Core', 'Models', 'Views'];
 
-        // use the current working directory, appended with a trailing slash
-        $this->rootDirectory = __DIR__ . '/../';
+        // use the approot configuration constant
+        $this->rootDirectory = APPROOT;
 
         // register our own implementation of the autoloader
         $this->register();
 
         // and now also register the Composer autoloader
-        require_once('../vendor/autoload.php');
+        require_once("{$this->rootDirectory}/vendor/autoload.php");
     }
 
     /**
@@ -39,7 +39,7 @@ class Autoloader
 
             $className = str_replace("\\", DIRECTORY_SEPARATOR, $className);
 
-            $file = $this->rootDirectory . $className . ".php";
+            $file = "{$this->rootDirectory}/{$className}.php";
 
             if (file_exists($file) === true) {
                 require_once($file);

@@ -5,7 +5,7 @@
 define('APPROOT', realpath(__DIR__ . DIRECTORY_SEPARATOR . '..'));
 
 /** @var $application \Core\Application */
-$application = require_once(APPROOT . '/bootstrap.php');
+$application = require_once(APPROOT . "/bootstrap.php");
 
 // kick off the application, let the frontcontroller handle the request and push out the response
 $application->handle();

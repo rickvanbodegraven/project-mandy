@@ -1,13 +1,13 @@
 <?php
 
-namespace Core;
+namespace Core\Modules;
 
 /**
  * Class Security
  *
  * @package Core
  */
-class Security
+class Security extends Module
 {
     private $requestIsEncrypted = false;
     private $domain = "";
