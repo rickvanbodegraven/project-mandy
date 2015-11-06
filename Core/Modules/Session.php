@@ -14,18 +14,6 @@ class Session extends Module
     // TODO perhaps implement a internal buffer session and flush that to $_SESSION on object destruction
 
     /**
-     * Is called by the base Module class directly after the constructor has been called
-     */
-    protected function postCreation()
-    {
-        // set the name for the session cookie. MAKE SURE IT CONTAINS AT LEAST ONE LETTER.
-        session_name(md5('APPLICATIONSESSIONKEY') . "COOKIE");
-        session_start();
-
-        $this->session =& $_SESSION;
-    }
-
-    /**
      * @param mixed $key
      * @param mixed $data
      *
@@ -64,5 +52,17 @@ class Session extends Module
         }
 
         return $this->session[$key];
+    }
+
+    /**
+     * Is called by the base Module class directly after the constructor has been called
+     */
+    protected function postCreation()
+    {
+        // set the name for the session cookie. MAKE SURE IT CONTAINS AT LEAST ONE LETTER.
+        session_name(md5('APPLICATIONSESSIONKEY') . "COOKIE");
+        session_start();
+
+        $this->session =& $_SESSION;
     }
 }

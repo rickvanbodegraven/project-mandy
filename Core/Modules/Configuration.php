@@ -8,15 +8,16 @@ namespace Core\Modules;
  */
 class Configuration extends Module
 {
+    private static $instance = null;
     private $configPath = "";
     private $configFileExtension = ".php";
     private $loadedConfigurations = [];
-    private static $instance = null;
 
     /**
      * Configuration constructor.
      *
      * @param $configurationFilesDirectory
+     *
      * @throws \InvalidArgumentException
      */
     public function __construct($configurationFilesDirectory)
@@ -33,9 +34,69 @@ class Configuration extends Module
         }
     }
 
+    /**
+     * Singleton
+     *
+     * @return Configuration
+     */
     public static function &instance()
     {
         return self::$instance;
+    }
+
+    /**
+     * @param string $group
+     * @param string $key
+     * @param mixed  $value
+     */
+    public function set($group, $key, $value)
+    {
+        // TODO maybe throw an exception if the group (or key) was not defined (or loaded yet)?
+
+        $this->loadedConfigurations[$group][$key] = $value;
+    }
+
+    /**
+     * Retrieve a specific configuration element
+     *
+     * @param string $group
+     * @param string $key
+     * @param string $defaultValue
+     *
+     * @return mixed
+     */
+    public function setting($group, $key, $defaultValue = null)
+    {
+        if ($this->loaded($group) === false) {
+            $this->load($group);
+            // TODO throw an exception (or bubble it up) if we can't load the group
+        }
+
+        $randomValue = microtime(true);
+
+        $retrievedValue = $this->get($group, $key, $randomValue);
+
+        if ($retrievedValue !== $randomValue) {
+            return $retrievedValue;
+        }
+
+        return $defaultValue;
+    }
+
+    /**
+     * @param string $group
+     * @param string $key
+     * @param mixed  $defaultValue
+     *
+     * @return mixed
+     */
+    private function get($group, $key, $defaultValue)
+    {
+        if (isset($this->loadedConfigurations[$group]) && isset($this->loadedConfigurations[$group][$key])) {
+            return $this->loadedConfigurations[$group][$key];
+        }
+
+        return $defaultValue;
     }
 
     /**
@@ -55,50 +116,6 @@ class Configuration extends Module
     }
 
     /**
-     * @param string $group
-     * @param string $key
-     * @param mixed $value
-     */
-    public function set($group, $key, $value)
-    {
-        // TODO maybe throw an exception if the group (or key) was not defined (or loaded yet)?
-
-        $this->loadedConfigurations[$group][$key] = $value;
-    }
-
-    /**
-     * Retrieve a specific configuration element
-     *
-     * @param string $group
-     * @param string $key
-     * @param string $defaultValue
-     *
-     * @return mixed
-     */
-    public function setting($group, $key, $defaultValue = "")
-    {
-        if ($this->loaded($group) === false) {
-            $this->load($group);
-            // TODO throw an exception (or bubble it up) if we can't load the group
-        }
-
-        if ($this->has($group, $key)) {
-            return $this->loadedConfigurations[$group][$key];
-        }
-
-        return $defaultValue;
-    }
-
-    public function settings($group)
-    {
-        if ($this->loaded($group) === false) {
-            $this->load($group);
-        }
-
-        return $this->loadedConfigurations[$group];
-    }
-
-    /**
      * Load a specific configuration file
      *
      * @param string $group
@@ -115,25 +132,16 @@ class Configuration extends Module
     }
 
     /**
-     * Private function to determine if a specific configuration key has been set
-     *
      * @param string $group
-     * @param string $key
      *
-     * @return bool
+     * @return mixed
      */
-    private function has($group, $key)
+    public function settings($group)
     {
         if ($this->loaded($group) === false) {
-            return false;
+            $this->load($group);
         }
 
-        $default = microtime(true); // generate a value that is unique enough
-
-        if ($this->setting($group, $key, $default) === $default) {
-            return false;
-        }
-
-        return true;
+        return $this->loadedConfigurations[$group];
     }
 }

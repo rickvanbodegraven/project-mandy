@@ -14,4 +14,12 @@ abstract class Controller
     }
 
     public abstract function index();
+
+    /**
+     * @return string
+     */
+    protected function dummyResponse($method)
+    {
+        return get_class($this) . ' responded from method ' . $method;
+    }
 }

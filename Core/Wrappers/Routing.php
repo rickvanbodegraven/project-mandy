@@ -3,10 +3,11 @@
 namespace Core\Wrappers;
 
 use Controllers;
-use Core\Controller;
 use Core\Modules\Configuration;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+
 use Symfony\Component\Routing\Exception\MethodNotAllowedException;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\Matcher\UrlMatcher;
@@ -44,9 +45,9 @@ class Routing
     }
 
     /**
-     * @param string   $path
-     * @param   string $handlerString
-     * @param array    $methods
+     * @param string $path
+     * @param string $handlerString
+     * @param array  $methods
      *
      * @return Route
      */
@@ -66,13 +67,15 @@ class Routing
     {
         $parts = explode("@", $handlerString);
 
+        $controllerNamespace = Configuration::instance()->setting('base', 'controllerNamespace');
+
         if (count($parts) === 2) {
             // controller and action
-            return ["_controller" => $parts[0], "_action" => $parts[1]];
+            return ["_controller" => "{$controllerNamespace}\\{$parts[0]}", "_action" => $parts[1]];
         }
 
         // just the controller
-        return ["_controller" => $handlerString, "_action" => "index"];
+        return ["_controller" => "{$controllerNamespace}\\{$handlerString}", "_action" => "index"];
     }
 
     /**
@@ -100,38 +103,44 @@ class Routing
     /**
      * @param Request $request
      *
-     * @return Controller
+     * @return Response
      */
-    public function getController(Request $request)
+    public function getControllerResponse(Request $request)
     {
         // build the context from the Request that was passed
         $this->context->fromRequest($request);
 
         $this->matcher = new UrlMatcher($this->routes, $this->context);
 
+        // default controller
+        $match = [ "_controller" => '\Controllers\HomeController', "_action" => "index" ];
+
         try {
-            $match = $this->matcher->match($request->getPathInfo());
+            $match = $this->matcher->matchRequest($request);
         } catch (\Exception $ex) {
             if ($ex instanceof ResourceNotFoundException) {
                 // TODO
                 echo "404 Not Found";
-                return;
-            }
-
-            if ($ex instanceof MethodNotAllowedException) {
+            } elseif ($ex instanceof MethodNotAllowedException) {
                 // TODO
-                echo "Current request method is NOT allowed";
-                return;
+                echo "Current request method is not allowed for this route";
             }
-        } finally {
-
         }
 
-        var_dump($match);
+        $controller = new $match['_controller']($request);
+        $action = $match['_action'];
+
+        // TODO implement a function to create a new array with just the arguments
 
 
-        // TODO implement logic that determines the controller to instantiate
+        // we pass $match as last parameter because it also contains all key-value pairs for the arguments of the action
+        $responseText = call_user_func_array([ $controller, $action ], $match);
 
-//        return new HomeController();
+//        $responseText = (new $match['_controller']($this->request))->$match['_action']($match['arguments']);
+//        $responseText = call_user_func_array("{$match['_controller']}->{$match['_action']}", []); //$match['arguments']);
+
+        $response = new Response($responseText);
+
+        return $response;
     }
 }

@@ -4,12 +4,12 @@ namespace Core;
 
 use Core\Modules\Configuration;
 use Core\Modules\Module;
+use Core\Modules\Security as Security;
+use Core\Modules\Session as Session;
+use Core\Wrappers\Routing as Routing;
+use Core\Wrappers\Twig;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Core\Wrappers\Twig;
-use Core\Modules\Session as Session;
-use Core\Modules\Security as Security;
-use Core\Wrappers\Routing as Routing;
 
 class Application
 {
@@ -138,24 +138,19 @@ class Application
     }
 
     /**
-     * @return string
+     *
      */
     public function handle()
     {
         $this->request = Request::createFromGlobals();
 
-        $this->getWrapper('Routing')->getController($this->request);
-
-
-
-
-
+        /** @var Response $response */
+        $response = $this->getWrapper('Routing')->getControllerResponse($this->request);
 
 
         // TODO use the Routing module to route the request to the correct controller
-
         // TODO tell that controller to generate the output, then pass that through to the response
-//        $response = new Response($input);
 
+        $response->send();
     }
 }
