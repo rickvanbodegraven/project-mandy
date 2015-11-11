@@ -8,11 +8,11 @@ class HomeController extends Controller
 {
     public function index()
     {
-        echo $this->dummyResponse(__METHOD__);
+        echo "This is the response from the index function of the homecontroller";
     }
 
     public function item($itemName)
     {
-        echo $this->dummyResponse(__METHOD__ . ' with ' . $itemName);
+        echo "response for item function of homecontroller, you passed parameter {$itemName}";
     }
 }

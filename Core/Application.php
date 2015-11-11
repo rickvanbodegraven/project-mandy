@@ -138,19 +138,23 @@ class Application
     }
 
     /**
-     *
+     * Handle the current request by telling the correct controller to generate a response
      */
     public function handle()
     {
         $this->request = Request::createFromGlobals();
 
+        /** @var Routing $routing */
+        $routing = $this->getWrapper('Routing');
+
         /** @var Response $response */
-        $response = $this->getWrapper('Routing')->getControllerResponse($this->request);
+        $response = $routing->getControllerResponse($this->request);
 
-
-        // TODO use the Routing module to route the request to the correct controller
-        // TODO tell that controller to generate the output, then pass that through to the response
-
+        // push out the response
         $response->send();
+
+        // TODO should we make some sort of hooking system just before the response is pushed out?
+
+        // TODO should figure out if we need to do something about output buffering
     }
 }
