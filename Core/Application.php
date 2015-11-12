@@ -7,7 +7,7 @@ use Core\Modules\Module;
 use Core\Modules\Security as Security;
 use Core\Modules\Session as Session;
 use Core\Wrappers\Routing as Routing;
-use Core\Wrappers\Twig;
+use Core\Wrappers\Blaze;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -42,7 +42,7 @@ class Application
 
         $this->registerWrappers([
             new Routing(),
-            new Twig()
+            new Blaze()
         ]);
     }
 
